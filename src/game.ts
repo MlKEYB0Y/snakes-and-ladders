@@ -1,7 +1,12 @@
+import { rollDie } from './dice.js';
+
 export class Game{
     positions = new Map<string, number>();
-    
+  
+
     constructor(names: string[]){
+    
+
 
         for (const name of names) {
             this.positions.set(name, 1);
@@ -14,10 +19,15 @@ export class Game{
         }
         return position;
     }
-    move(name: string, roll: number): void {
+    private move(name: string, roll: number): void {
         const currentPosition = this.getPosition(name);
         const newPosition = currentPosition + roll;
         this.positions.set(name, newPosition);
+    }
+
+    takeTurn(name: string): void {
+        const roll = rollDie();
+        this.move(name, roll);
     }
 
 
