@@ -7,7 +7,7 @@ Core domain engine for a Snakes and Ladders board game.
 - A new game starts every player on square 1.
 - Basic movement: a player's position advances by a die roll.
 
-Everything else above (winning, bounce-back, turn order, blocking moves after a win) is still to be built. This is a work in progress, developed test-first.
+Work in progress, developed test-first.
 
 ## Getting started
 
