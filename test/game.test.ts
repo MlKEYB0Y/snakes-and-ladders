@@ -33,4 +33,27 @@ describe("Feature 1: Starting & Moving", () => {
 
     expect(game.getPosition("Player 1")).toBe(8);
   });
+
+  it("a game can start a player on a specified square", () => {
+    const game = new Game(["Player 1", "Player 2"], new Map([["Player 1", 97]]));
+
+    expect(game.getPosition("Player 1")).toBe(97);
+    expect(game.getPosition("Player 2")).toBe(1);
+  });
+});
+
+describe("Feature 2: Winning", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("2.1: Player 1 on Square 97 rolls a 3, lands on Square 100 and wins", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0.4);
+    const game = new Game(["Player 1", "Player 2"], new Map([["Player 1", 97]]));
+
+    const winner = game.takeTurn("Player 1");
+
+    expect(game.getPosition("Player 1")).toBe(100);
+    expect(winner).toBe("Player 1 wins");
+  });
 });
