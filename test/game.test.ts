@@ -23,9 +23,7 @@ describe("Feature 1: Starting & Moving", () => {
   });
 
   it("1.3: Player 1 rolls a 3, then a 4, landing on Square 8", () => {
-    vi.spyOn(Math, "random")
-      .mockReturnValueOnce(0.4)
-      .mockReturnValueOnce(0.5);
+    vi.spyOn(Math, "random").mockReturnValueOnce(0.4).mockReturnValueOnce(0.5);
     const game = new Game(["Player 1", "Player 2"]);
 
     game.takeTurn("Player 1");
@@ -35,7 +33,10 @@ describe("Feature 1: Starting & Moving", () => {
   });
 
   it("a game can start a player on a specified square", () => {
-    const game = new Game(["Player 1", "Player 2"], new Map([["Player 1", 97]]));
+    const game = new Game(
+      ["Player 1", "Player 2"],
+      new Map([["Player 1", 97]]),
+    );
 
     expect(game.getPosition("Player 1")).toBe(97);
     expect(game.getPosition("Player 2")).toBe(1);
@@ -49,7 +50,10 @@ describe("Feature 2: Winning", () => {
 
   it("2.1: Player 1 on Square 97 rolls a 3, lands on Square 100 and wins", () => {
     vi.spyOn(Math, "random").mockReturnValue(0.4);
-    const game = new Game(["Player 1", "Player 2"], new Map([["Player 1", 97]]));
+    const game = new Game(
+      ["Player 1", "Player 2"],
+      new Map([["Player 1", 97]]),
+    );
 
     const winner = game.takeTurn("Player 1");
 
