@@ -58,6 +58,7 @@ export class Game {
     if (this.gameOver) {
       throw new Error("Game is over.");
     }
+    this.getPosition(name);
     if (name !== this.getCurrentPlayer()) {
       throw new Error(`It's not ${name}'s turn.`);
     }

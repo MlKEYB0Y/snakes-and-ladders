@@ -132,6 +132,14 @@ describe("Feature 3: Turns & Multiple Players", () => {
     expect(() => game.takeTurn("Player 1")).toThrow("It's not Player 1's turn");
     expect(game.getPosition("Player 1")).toBe(4);
   });
+
+  it("an unknown player cannot take a turn", () => {
+    const game = new Game(["Player 1", "Player 2"]);
+
+    expect(() => game.takeTurn("Player 3")).toThrow(
+      "Player Player 3 does not exist.",
+    );
+  });
 });
 
 describe("Setup validation", () => {
