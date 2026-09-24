@@ -1,6 +1,7 @@
 import { rollDie } from "./dice.js";
 
 export class Game {
+  gameOver = false;
   positions = new Map<string, number>();
 
   constructor(
@@ -21,15 +22,21 @@ export class Game {
   private move(name: string, roll: number): void {
     const currentPosition = this.getPosition(name);
     let newPosition = currentPosition + roll;
-    if(newPosition > 100) {newPosition = 100 - (newPosition - 100);}
+    if (newPosition > 100) {
+      newPosition = 100 - (newPosition - 100);
+    }
     this.positions.set(name, newPosition);
   }
 
   takeTurn(name: string): string | undefined {
+    if (this.gameOver) {
+      throw new Error("Game is over.");
+    }
     const roll = rollDie();
     this.move(name, roll);
 
     if (this.hasWon(name)) {
+      this.gameOver = true;
       return `${name} wins`;
     }
     return undefined;

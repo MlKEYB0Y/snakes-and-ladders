@@ -8,6 +8,7 @@ Core domain engine for a Snakes and Ladders board game.
 - Basic movement: a player's position advances by a die roll, and rolls accumulate across turns.
 - A player must land exactly on square 100 to win: `takeTurn` returns `"<name> wins"`.
 - Overshooting 100 bounces the player back by the extra amount (e.g. 97 + 4 → 99).
+- Once a player has won, further turns throw a `"Game is over."` error.
 
 Work in progress, developed test-first.
 
@@ -26,4 +27,8 @@ npm test
 - `npm run build` — compile to `dist/`
 - `npm run lint` — check linting and formatting (Biome)
 - `npm run format` — auto-fix formatting and import order (Biome)
+
+## Linting and formatting
+
+The project uses [Biome](https://biomejs.dev) for both linting and formatting, configured in `biome.json`. In VS Code, install the recommended Biome extension to format on save.
 

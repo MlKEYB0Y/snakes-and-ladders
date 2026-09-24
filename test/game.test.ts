@@ -72,4 +72,17 @@ describe("Feature 2: Winning", () => {
 
     expect(game.getPosition("Player 1")).toBe(99);
   });
+
+  it("2.3: once a player has won, further turns are not allowed", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0.4);
+    const game = new Game(
+      ["Player 1", "Player 2"],
+      new Map([["Player 1", 97]]),
+    );
+
+    game.takeTurn("Player 1");
+
+    expect(() => game.takeTurn("Player 2")).toThrow("Game is over");
+    expect(game.getPosition("Player 2")).toBe(1);
+  });
 });
