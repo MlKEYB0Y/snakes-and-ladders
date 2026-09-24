@@ -133,3 +133,26 @@ describe("Feature 3: Turns & Multiple Players", () => {
     expect(game.getPosition("Player 1")).toBe(4);
   });
 });
+
+describe("Setup validation", () => {
+  it("a game cannot be created with fewer than two players", () => {
+    expect(() => new Game(["Player 1"])).toThrow(
+      "A game needs at least two players.",
+    );
+  });
+
+  it("a game cannot be created with duplicate player names", () => {
+    expect(() => new Game(["Bob", "Bob"])).toThrow(
+      "Player names must be unique.",
+    );
+  });
+
+  it("a player cannot start outside squares 1 to 99", () => {
+    expect(
+      () => new Game(["Player 1", "Player 2"], new Map([["Player 1", 100]])),
+    ).toThrow("Invalid starting square for Player 1: 100");
+    expect(
+      () => new Game(["Player 1", "Player 2"], new Map([["Player 1", 0]])),
+    ).toThrow("Invalid starting square for Player 1: 0");
+  });
+});
