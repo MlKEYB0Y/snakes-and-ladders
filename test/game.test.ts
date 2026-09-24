@@ -1,11 +1,15 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { rollDie } from "../src/dice.js";
 import { Game } from "../src/game.js";
 
-describe("Feature 1: Starting & Moving", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
+vi.mock("../src/dice.js");
 
+beforeEach(() => {
+  vi.resetAllMocks();
+  vi.mocked(rollDie).mockReturnValue(1);
+});
+
+describe("Feature 1: Starting & Moving", () => {
   it("1.1: a new game starts with Player 1 and Player 2 on Square 1", () => {
     const game = new Game(["Player 1", "Player 2"]);
 
@@ -14,7 +18,7 @@ describe("Feature 1: Starting & Moving", () => {
   });
 
   it("1.2: Player 1 on Square 1 rolls a 4, lands on Square 5", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0.5);
+    vi.mocked(rollDie).mockReturnValue(4);
     const game = new Game(["Player 1", "Player 2"]);
 
     game.takeTurn("Player 1");
@@ -23,10 +27,10 @@ describe("Feature 1: Starting & Moving", () => {
   });
 
   it("1.3: Player 1 rolls a 3, then a 4, landing on Square 8", () => {
-    vi.spyOn(Math, "random")
-      .mockReturnValueOnce(0.4) // Player 1 rolls 3
-      .mockReturnValueOnce(0.0) // Player 2 rolls 1
-      .mockReturnValueOnce(0.5); // Player 1 rolls 4
+    vi.mocked(rollDie)
+      .mockReturnValueOnce(3) // Player 1
+      .mockReturnValueOnce(1) // Player 2
+      .mockReturnValueOnce(4); // Player 1
     const game = new Game(["Player 1", "Player 2"]);
 
     game.takeTurn("Player 1");
@@ -48,12 +52,8 @@ describe("Feature 1: Starting & Moving", () => {
 });
 
 describe("Feature 2: Winning", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it("2.1: Player 1 on Square 97 rolls a 3, lands on Square 100 and wins", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0.4);
+    vi.mocked(rollDie).mockReturnValue(3);
     const game = new Game(
       ["Player 1", "Player 2"],
       new Map([["Player 1", 97]]),
@@ -66,7 +66,7 @@ describe("Feature 2: Winning", () => {
   });
 
   it("2.2: Player 1 on Square 97 rolls a 4, bounces back to Square 99", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0.5);
+    vi.mocked(rollDie).mockReturnValue(4);
     const game = new Game(
       ["Player 1", "Player 2"],
       new Map([["Player 1", 97]]),
@@ -78,7 +78,7 @@ describe("Feature 2: Winning", () => {
   });
 
   it("2.3: once a player has won, further turns are not allowed", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0.4);
+    vi.mocked(rollDie).mockReturnValue(3);
     const game = new Game(
       ["Player 1", "Player 2"],
       new Map([["Player 1", 97]]),
@@ -92,10 +92,6 @@ describe("Feature 2: Winning", () => {
 });
 
 describe("Feature 3: Turns & Multiple Players", () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
   it("3.1: after Player 1 rolls, it is Player 2's turn", () => {
     const game = new Game(["Player 1", "Player 2"]);
 
@@ -114,7 +110,7 @@ describe("Feature 3: Turns & Multiple Players", () => {
   });
 
   it("3.3: Player 1 rolling a 3 does not move Player 2", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0.4);
+    vi.mocked(rollDie).mockReturnValue(3);
     const game = new Game(["Player 1", "Player 2"]);
 
     game.takeTurn("Player 1");
@@ -124,7 +120,7 @@ describe("Feature 3: Turns & Multiple Players", () => {
   });
 
   it("a player cannot take two turns in a row", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0.4);
+    vi.mocked(rollDie).mockReturnValue(3);
     const game = new Game(["Player 1", "Player 2"]);
 
     game.takeTurn("Player 1");
