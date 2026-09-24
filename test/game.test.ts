@@ -23,10 +23,14 @@ describe("Feature 1: Starting & Moving", () => {
   });
 
   it("1.3: Player 1 rolls a 3, then a 4, landing on Square 8", () => {
-    vi.spyOn(Math, "random").mockReturnValueOnce(0.4).mockReturnValueOnce(0.5);
+    vi.spyOn(Math, "random")
+      .mockReturnValueOnce(0.4) // Player 1 rolls 3
+      .mockReturnValueOnce(0.0) // Player 2 rolls 1
+      .mockReturnValueOnce(0.5); // Player 1 rolls 4
     const game = new Game(["Player 1", "Player 2"]);
 
     game.takeTurn("Player 1");
+    game.takeTurn("Player 2");
     game.takeTurn("Player 1");
 
     expect(game.getPosition("Player 1")).toBe(8);
@@ -84,5 +88,48 @@ describe("Feature 2: Winning", () => {
 
     expect(() => game.takeTurn("Player 2")).toThrow("Game is over");
     expect(game.getPosition("Player 2")).toBe(1);
+  });
+});
+
+describe("Feature 3: Turns & Multiple Players", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("3.1: after Player 1 rolls, it is Player 2's turn", () => {
+    const game = new Game(["Player 1", "Player 2"]);
+
+    game.takeTurn("Player 1");
+
+    expect(game.getCurrentPlayer()).toBe("Player 2");
+  });
+
+  it("3.2: after Player 2 rolls, it is Player 1's turn again", () => {
+    const game = new Game(["Player 1", "Player 2"]);
+
+    game.takeTurn("Player 1");
+    game.takeTurn("Player 2");
+
+    expect(game.getCurrentPlayer()).toBe("Player 1");
+  });
+
+  it("3.3: Player 1 rolling a 3 does not move Player 2", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0.4);
+    const game = new Game(["Player 1", "Player 2"]);
+
+    game.takeTurn("Player 1");
+
+    expect(game.getPosition("Player 1")).toBe(4);
+    expect(game.getPosition("Player 2")).toBe(1);
+  });
+
+  it("a player cannot take two turns in a row", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0.4);
+    const game = new Game(["Player 1", "Player 2"]);
+
+    game.takeTurn("Player 1");
+
+    expect(() => game.takeTurn("Player 1")).toThrow("It's not Player 1's turn");
+    expect(game.getPosition("Player 1")).toBe(4);
   });
 });

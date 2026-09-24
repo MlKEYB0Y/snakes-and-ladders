@@ -2,6 +2,8 @@ import { rollDie } from "./dice.js";
 
 export class Game {
   gameOver = false;
+  players: string[] = [];
+  currentPlayerIndex = 0;
   positions = new Map<string, number>();
 
   constructor(
@@ -11,6 +13,8 @@ export class Game {
     for (const name of names) {
       this.positions.set(name, startingPositions.get(name) || 1);
     }
+
+    this.players = names;
   }
   getPosition(name: string): number {
     const position = this.positions.get(name);
@@ -18,6 +22,9 @@ export class Game {
       throw new Error(`Player ${name} does not exist.`);
     }
     return position;
+  }
+  getCurrentPlayer(): string {
+    return this.players[this.currentPlayerIndex];
   }
   private move(name: string, roll: number): void {
     const currentPosition = this.getPosition(name);
@@ -32,8 +39,15 @@ export class Game {
     if (this.gameOver) {
       throw new Error("Game is over.");
     }
+    if (name !== this.getCurrentPlayer()) {
+      throw new Error(`It's not ${name}'s turn.`);
+    }
     const roll = rollDie();
     this.move(name, roll);
+    this.currentPlayerIndex = this.currentPlayerIndex + 1;
+    if (this.currentPlayerIndex >= this.players.length) {
+      this.currentPlayerIndex = 0;
+    }
 
     if (this.hasWon(name)) {
       this.gameOver = true;
