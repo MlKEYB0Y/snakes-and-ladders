@@ -9,23 +9,31 @@ export class Game {
   constructor(
     names: string[],
     startingPositions: Map<string, number> = new Map(),
-    
   ) {
-    if(names.length < 2) {
-      throw new Error("A game needs at least two players.");}
-    if (new Set(names).size !== names.length) {
-      throw new Error("Player names must be unique."); 
-    }
-    for (const [name, square] of startingPositions) {
-      if (square < 1 || square > 99) {  
-        throw new Error(`Invalid starting square for ${name}: ${square}`);
-      }
-    }
+    this.validateSetup(names, startingPositions);
+
     for (const name of names) {
       this.positions.set(name, startingPositions.get(name) || 1);
     }
 
     this.players = [...names];
+  }
+
+  private validateSetup(
+    names: string[],
+    startingPositions: Map<string, number>,
+  ): void {
+    if (names.length < 2) {
+      throw new Error("A game needs at least two players.");
+    }
+    if (new Set(names).size !== names.length) {
+      throw new Error("Player names must be unique.");
+    }
+    for (const [name, square] of startingPositions) {
+      if (square < 1 || square > 99) {
+        throw new Error(`Invalid starting square for ${name}: ${square}`);
+      }
+    }
   }
   getPosition(name: string): number {
     const position = this.positions.get(name);
