@@ -20,7 +20,8 @@ export class Game {
   }
   private move(name: string, roll: number): void {
     const currentPosition = this.getPosition(name);
-    const newPosition = currentPosition + roll;
+    let newPosition = currentPosition + roll;
+    if(newPosition > 100) {newPosition = 100 - (newPosition - 100);}
     this.positions.set(name, newPosition);
   }
 

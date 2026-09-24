@@ -60,4 +60,16 @@ describe("Feature 2: Winning", () => {
     expect(game.getPosition("Player 1")).toBe(100);
     expect(winner).toBe("Player 1 wins");
   });
+
+  it("2.2: Player 1 on Square 97 rolls a 4, bounces back to Square 99", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0.5);
+    const game = new Game(
+      ["Player 1", "Player 2"],
+      new Map([["Player 1", 97]]),
+    );
+
+    game.takeTurn("Player 1");
+
+    expect(game.getPosition("Player 1")).toBe(99);
+  });
 });

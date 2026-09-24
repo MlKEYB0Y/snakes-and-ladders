@@ -6,7 +6,8 @@ Core domain engine for a Snakes and Ladders board game.
 
 - A new game starts every player on square 1, unless given a different starting square.
 - Basic movement: a player's position advances by a die roll, and rolls accumulate across turns.
-- A player who reaches square 100 wins: `takeTurn` returns `"<name> wins"`.
+- A player must land exactly on square 100 to win: `takeTurn` returns `"<name> wins"`.
+- Overshooting 100 bounces the player back by the extra amount (e.g. 97 + 4 → 99).
 
 Work in progress, developed test-first.
 
